@@ -13,24 +13,16 @@ pnpm dev
 # or
 bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<b> LOSSIE : ai lost & found tracker </b>
+<br>
+main motive : <br>
+* in campus its most likely that students lose their valuable items like mobiles, laptops, books etc. so we are creating a platform where students can upload their lost items and the found items can be matched with the lost items. <br>
+* we are also providing an automated system where the lost items can be matched with the found items. <br>
+* no more manual labour, AI is here for you . <br>
+<br>
+<br>
+technology highlights :
+* <b> AI : </b> hugging face pre-trained model (BLIP- image captioning)  <br>
+* <b> Next.js </b> : for building the frontend of the application. <br>
+* <b> Node.js </b> : for building the backend of the application. <br>
+* <b> MongoDB </b> : for storing the data of the lost and found items. <br>
