@@ -9,7 +9,7 @@ const Landing = () => {
 
       <main className=''>
         <div className='flex'>
-          <div className='mt-32 ml-16 max-sm:ml-8 max-sm:mt-60'>
+          <div className='mt-32 ml-16 max-sm:ml-8 max-sm:mt-80'>
             <h1 className='text-7xl text-[#2d132e] max-sm:text-4xl '>
               Lost Something? <br /> Found Something? <br />
               <span className='text-[#dd7230] font-semibold '>Let’s Reconnect ! </span>
@@ -20,12 +20,12 @@ const Landing = () => {
             <br />
             <Link href={'/sign'} className='border-2 border-[#2d132e] rounded-[99px] px-5 py-2 ml-2 bg-[#2d132e] text-white font-sans hover:bg-[#dd7230] hover:text-[#2d132e] hover:border-[#dd7230] font-semibold duration-1000 max-sm:text-[14px] max-sm:px-4 max-sm:py-1.5 '>Get Started</Link>
           </div>
-          <img src="" alt="" />
+          <img src="main.png" className="w-[700px] mt-24 object-contain max-sm:w-[360px] max-sm:mb-60 max-sm:-ml-[350px]" />
         </div>
 
 
-        <div className='mt-44 ml-14 max-sm:ml-8'>
-          <p className='text-5xl font-sans text-[#2d132e] font-bold ml-32 max-sm:text-3xl max-sm:ml-10'>
+        <div className='mt-44 ml-14 max-sm:ml-5'>
+          <p className='text-5xl font-sans text-[#2d132e] font-bold ml-20 max-sm:text-3xl max-sm:ml-5'>
             How It Works ?
           </p>
           <div className='flex items-center justify-around'>

@@ -6,7 +6,7 @@ const Lostfeeds = () => {
 
     <main className="">
       <h3 className="text-[18px] mb-5 mr-[150px] m-auto text-right max-sm:mr-0">browsing found items</h3>
-      <div className="flex justify-center w-[100%] m-1 max-sm:m-5">
+      <div className="flex justify-center w-[100%] m-1">
         <div className="flex flex-wrap gap-10 w-[1100px]">
           <div id="found-item" className="">
             <img src="found.jpg" className="object-cover rounded-md h-60 w-60  max-sm:h-44 max-sm:w-44" />

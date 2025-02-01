@@ -26,8 +26,8 @@ const Homepage = () => {
       <Searchbar/>
       
       <div className="flex  gap-2 mt-5 justify-center">
-        <button  onClick={handletab("lost")} className="tab active text-xl bg-slate-300 rounded-[99px] px-80 py-1 cursor-pointer max-sm:px-[70px] max-sm:py-1 max-sm:text-[17px] font-sans ">lost feeds</button>
-        <button  onClick={handletab("found")} className="tab text-xl bg-slate-300 rounded-[99px] px-80 py-1 cursor-pointer max-sm:px-[70px] max-sm:py-1 max-sm:text-[17px] font-sans ">found feeds</button>
+        <button  onClick={handletab("lost")} className="tab active text-xl bg-slate-300 rounded-[99px] px-80 py-1 cursor-pointer max-sm:px-[60px] max-sm:py-1 max-sm:text-[17px] font-sans ">lost feeds</button>
+        <button  onClick={handletab("found")} className="tab text-xl bg-slate-300 rounded-[99px] px-80 py-1 cursor-pointer max-sm:px-[60px] max-sm:py-1 max-sm:text-[17px] font-sans ">found feeds</button>
       </div>
       <div className="container mx-auto p-4">
         {activeTab === "lost" && <Lost />}

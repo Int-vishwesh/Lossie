@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#2d232e] flex flex-col bg-center ">
       <div className='flex justify-between max-sm:flex-col'>
-        <div className=' ml-10 mt-5 max-sm:w-96 justify-center flex flex-col'>
+        <div className=' ml-10 mt-5 max-sm:w-80 justify-center flex flex-col'>
           <h1 className='text-[#dd7230] text-xl font-sans '>Lossie</h1>
           <hr />
           <p className='text-gray-300'>"get yout things always by your side"</p>
@@ -21,7 +21,7 @@ const Footer = () => {
             <Link href={''} className='hover:text-white duration-1000'> know more</Link>
           </div>
         </div>
-        <div className=' mt-16 mr-16 max-sm:mt-2 max-sm:ml-44 mb-3 '>
+        <div className=' mt-16 mr-16 max-sm:mt-2 max-sm:mx-auto max-sm:text-center mb-3 '>
           <p className='ml-1.5 '>follow us on :</p>
           <div className='flex justify-center gap-2 w-36 '>
             <Link href={'https://www.linkedin.com/in/vishwesh-aryan-608691236/'} className='text-[#aaa] hover:text-white text-xl'><Linkedin /></Link>
