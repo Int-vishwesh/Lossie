@@ -6,7 +6,9 @@ body{
   font-family: 'Poppins';
   padding: 0;
   margin: 0;
-  @apply m-0;
+  background-image: url(../public/bg1.png);
+  background-size:500vh;
+  @apply m-0 max-sm:bg-[400vh];
   /*bg-[#F7E2C1]; 
   /* 2d232e dark,  8c93a8 semi, dd7230 or, b5c2b7 light , slate-400, #2d1e30 */
 }

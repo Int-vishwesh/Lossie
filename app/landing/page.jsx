@@ -6,6 +6,7 @@ const Landing = () => {
   return (
     <>
       <Navbar />
+
       <main className=''>
         <div className='flex'>
           <div className='mt-32 ml-16 max-sm:ml-8 max-sm:mt-60'>
@@ -23,7 +24,7 @@ const Landing = () => {
         </div>
 
 
-        <div className='mt-44 ml-14'>
+        <div className='mt-44 ml-14 max-sm:ml-8'>
           <p className='text-5xl font-sans text-[#2d132e] font-bold ml-32 max-sm:text-3xl max-sm:ml-10'>
             How It Works ?
           </p>
@@ -38,14 +39,14 @@ const Landing = () => {
             <img src="step2.png" className='w-[500px] -ml-24 max-sm:w-[260px] max-sm:mt-2 max-sm:ml-0' />
           </div>
           <div className='flex items-center justify-around'>
-            <img src="step3.png" className='w-[450px] -ml-24 max-sm:w-[260px] max-sm:mt-2 max-sm:ml-0' />
+            <img src="step3.png" className='w-[450px] -ml-24 max-sm:w-[240px] max-sm:mt-2 max-sm:ml-0' />
             <p className='w-96 mr-0 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Get Notified</span><br />
               and finally contact, meet and get your things back to you</p>
           </div>
           <div className='flex items-center justify-around'>
             <p className='w-96 mr-0 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Manual Browsing</span><br />
               you also, have an option to browse them, if it takes time. we dont abstract these</p>
-            <img src="step4.png" className='w-[450px] -ml-24 max-sm:w-[260px] max-sm:mt-2 max-sm:ml-0' />
+            <img src="step4.png" className='w-[450px] -ml-24 max-sm:w-[240px] max-sm:mt-2 max-sm:ml-0' />
           </div>
         </div>
         <div className=' m-20 max-sm:m-10'>

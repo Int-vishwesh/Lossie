@@ -23,7 +23,7 @@ const Footer = () => {
         </div>
         <div className=' mt-16 mr-16 max-sm:mt-2 max-sm:ml-44 mb-3 '>
           <p className='ml-1.5 '>follow us on :</p>
-          <div className='flex justify-evenly w-36 '>
+          <div className='flex justify-center gap-2 w-36 '>
             <Link href={'https://www.linkedin.com/in/vishwesh-aryan-608691236/'} className='text-[#aaa] hover:text-white text-xl'><Linkedin /></Link>
             <Link href={''} className='hover:text-white text-xl text-[#aaa] '><Instagram /></Link>
             <Link href={''} className='hover:text-white text-xl text-[#aaa] '><Mail /></Link>
