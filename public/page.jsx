@@ -9,7 +9,7 @@ const Landing = () => {
 
       <main className=''>
         <div className='flex'>
-          <div className='mt-32 ml-16 max-sm:ml-8 max-sm:mt-80'>
+          <div className='mt-32 ml-16 max-sm:ml-8 '>
             <h1 className='text-7xl text-[#2d132e] max-sm:text-4xl '>
               Lost Something? <br /> Found Something? <br />
               <span className='text-[#dd7230] font-semibold '>Let’s Reconnect ! </span>
@@ -20,7 +20,7 @@ const Landing = () => {
             <br />
             <Link href={'/sign'} className='border-2 border-[#2d132e] rounded-[99px] px-5 py-2 ml-2 bg-[#2d132e] text-white font-sans hover:bg-[#dd7230] hover:text-[#2d132e] hover:border-[#dd7230] font-semibold duration-1000 max-sm:text-[14px] max-sm:px-4 max-sm:py-1.5 '>Get Started</Link>
           </div>
-          <img src="main.png" className="w-[700px] mt-24 object-contain max-sm:w-[360px] max-sm:mb-60 max-sm:-ml-[350px]" />
+          <img src="main2.png" className="w-[550px] mt-24 object-contain max-sm:w-[330px] max-sm:mt-96 max-sm:-ml-[325px]" />
         </div>
 
 
@@ -30,7 +30,7 @@ const Landing = () => {
           </p>
           <div className='flex items-center justify-around'>
             <img src="step1.png" className='w-[500px] -ml-24 max-sm:w-[260px] max-sm:mt-2 max-sm:ml-0' />
-            <p className='w-96 mr-0 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Report</span><br />
+            <p className='w-96 mr-1 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Report</span><br />
               describe your lost item and upload a photo or if found something</p>
           </div>
           <div className='flex items-center justify-around'>
@@ -40,7 +40,7 @@ const Landing = () => {
           </div>
           <div className='flex items-center justify-around'>
             <img src="step3.png" className='w-[450px] -ml-24 max-sm:w-[240px] max-sm:mt-2 max-sm:ml-0' />
-            <p className='w-96 mr-0 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Get Notified</span><br />
+            <p className='w-96 mr-2 text-slate-700 font-serif text-[17px] max-sm:text-[13px]'><span className='text-3xl text-[#dd7230] font-sans font-bold max-sm:text-2xl '>Get Notified</span><br />
               and finally contact, meet and get your things back to you</p>
           </div>
           <div className='flex items-center justify-around'>
