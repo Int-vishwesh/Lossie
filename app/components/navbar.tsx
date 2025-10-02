@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,9 @@ const Navbar = () => {
   return (
     <div className={`flex justify-between ${isOpen? "bg-slate-300 duration-300 " : "bg-transparent"} `}>
       <div className='ml-1 z-10 '>
-        <Link href={'/landing'}><img src="logo.png" alt="lossie" className='h-14 max-sm:h-10'/> </Link>
+        <Link href={'/landing'}>
+        <Image src={"/logo.png"} alt="lossie" width={110} height={20} className='h-14 max-sm:h-10'/> 
+        </Link>
         <h1 className='text-[#2d1e30] -mt-[18px] max-sm:-mt-[14.5px] ml-[18px] text-[14.5px] font-sans max-sm:text-[12px] max-sm:ml-[12px]  '>AI</h1>
         <h1 className='text-[#2d1e30] -mt-[22px] max-sm:-mt-[18.5px] ml-[50px] text-[14.5px] font-sans max-sm:text-[12px] max-sm:ml-[35px] '> lost & found tracker</h1>
       </div>
