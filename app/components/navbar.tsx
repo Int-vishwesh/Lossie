@@ -16,7 +16,7 @@ const Navbar = () => {
     <div className={`flex justify-between ${isOpen? "bg-slate-300 duration-300 " : "bg-transparent"} `}>
       <div className='ml-1 z-10 '>
         <Link href={'/landing'}>
-        <Image src={"/logo.png"} alt="lossie" width={110} height={20} className='h-14 max-sm:h-10'/> 
+        <Image src={"/logo.png"} alt="lossie logo" width={110} height={20} className=' max-sm:h-9 max-sm:w-20'/> 
         </Link>
         <h1 className='text-[#2d1e30] -mt-[18px] max-sm:-mt-[14.5px] ml-[18px] text-[14.5px] font-sans max-sm:text-[12px] max-sm:ml-[12px]  '>AI</h1>
         <h1 className='text-[#2d1e30] -mt-[22px] max-sm:-mt-[18.5px] ml-[50px] text-[14.5px] font-sans max-sm:text-[12px] max-sm:ml-[35px] '> lost & found tracker</h1>
