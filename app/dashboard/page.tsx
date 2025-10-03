@@ -47,18 +47,18 @@ export default function Dashboard() {
             <p className="text-gray-600">Day Scholar</p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 mt-6 md:mt-0">
-          <div className="bg-blue-50 rounded-xl p-4 text-center shadow">
+        <div className="grid grid-cols-3 gap-6 mt-5 md:mt-0">
+          <div className="bg-blue-100 rounded-xl p-4 text-center shadow">
             <p className="text-2xl font-bold text-blue-600">{lostItems.length}</p>
-            <p className="text-sm text-gray-600">Lost Items</p>
+            <p className="text-sm max-sm:text-[13px] text-gray-600">Lost Items</p>
           </div>
-          <div className="bg-green-50 rounded-xl p-4 text-center shadow">
+          <div className="bg-green-100 rounded-xl p-4 text-center shadow">
             <p className="text-2xl font-bold text-green-600">{foundItems.length}</p>
-            <p className="text-sm text-gray-600">Found Items</p>
+            <p className="text-sm max-sm:text-[13px] text-gray-600">Found Items</p>
           </div>
-          <div className="bg-purple-50 rounded-xl p-4 text-center shadow">
+          <div className="bg-orange-100 rounded-xl p-4 text-center shadow">
             <p className="text-2xl font-bold text-purple-600">{matchedItems.length}</p>
-            <p className="text-sm text-gray-600">Matches</p>
+            <p className="text-sm max-sm:text-[13px] text-gray-600">Matches</p>
           </div>
         </div>
       </div>
@@ -67,13 +67,13 @@ export default function Dashboard() {
         <section>
           <h3 className="text-lg font-semibold mb-4">Matched List</h3>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 space-x-4">
+            <div className="flex gap-10 max-sm:gap-3 space-x-4">
               {matchedItems.length === 0 ? (
                 <p className="w-full text-center text-gray-500">No matched items yet!</p>
               ) : (
                 matchedItems.map((item) => (
                   <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[18vw] xl:w-[15vw] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow p-2">
+                    <div className="w-full aspect-square bg-white rounded-xl flex flex-col items-center justify-center shadow-sm hover:shadow-lg transition-shadow p-2">
                       <Image src={item.imageUrl} alt={item.name} width={150} height={100} className="object-cover rounded-md mb-2" />
                       <p className="text-sm font-medium text-[#2d132e] text-center line-clamp-1">{item.name}</p>
                       <span className="text-xs text-purple-600 mt-1">Matched!</span>
@@ -88,7 +88,7 @@ export default function Dashboard() {
         <section>
           <h3 className="text-lg font-semibold mb-4">Found List</h3>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 space-x-4">
+            <div className="flex gap-10 max-sm:gap-3 space-x-4">
               {foundItems.length === 0 ? (
                 <p className="w-full text-center text-gray-500">No items you&apos;ve found yet!</p>
               ) : (
@@ -109,7 +109,7 @@ export default function Dashboard() {
         <section>
           <h3 className="text-lg font-semibold mb-4">Lost List</h3>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 space-x-4">
+            <div className="flex gap-10 max-sm:gap-3 space-x-4">
               {lostItems.length === 0 ? (
                 <p className="w-full text-center text-gray-500">No items you&apos;ve lost yet!</p>
               ) : (
