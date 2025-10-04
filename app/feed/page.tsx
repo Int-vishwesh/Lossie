@@ -45,7 +45,7 @@ export default function FeedPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Link href="/report-item" className="flex-shrink-0 max-sm:text-[12px] flex items-center gap-2 px-4 py-2 bg-orange-400 text-white rounded-lg shadow-sm hover:bg-orange-600 transition">
+        <Link href="/report-item" className="flex-shrink-0 max-sm:text-[12px] flex items-center gap-2 px-4 py-2 bg-orange-400 text-white rounded-4xl shadow-sm hover:bg-orange-600 transition">
           <Plus size={18} /> Add Item
         </Link>
       </div>
@@ -53,9 +53,9 @@ export default function FeedPage() {
       <div className="flex justify-center gap-4 mb-8">
         <button
           onClick={() => setActiveTab("lost")}
-          className={`px-10 py-2 rounded-4xl font-semibold text-sm transition-all duration-200 ${
+          className={`px-30 max-sm:px-15 py-2 rounded-4xl font-semibold text-sm transition-all duration-200 ${
             activeTab === "lost"
-              ? "bg-blue-500 text-white shadow"
+              ? "bg-red-400 text-white shadow"
               : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-100"
           }`}
         >
@@ -63,9 +63,9 @@ export default function FeedPage() {
         </button>
         <button
           onClick={() => setActiveTab("found")}
-          className={`px-8 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+          className={`px-30 max-sm:px-15 py-2 rounded-4xl font-semibold text-sm transition-all duration-200 ${
             activeTab === "found"
-              ? "bg-blue-500 text-white shadow"
+              ? "bg-green-500 text-white shadow"
               : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-100"
           }`}
         >
