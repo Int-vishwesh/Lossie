@@ -8,7 +8,7 @@ export default function ReportItemPage() {
   const [itemType, setItemType] = useState<'lost' | 'found'>('lost');
 
   return (
-    <><h1 className="text-3xl max-sm:text-xl mt-5 font-bold text-[#2d132e] text-center -mb-10 max-sm:-mb-15">
+    <><h1 className="text-3xl max-sm:text-xl mt-5 font-bold text-[#2d132e] text-center -mb-10 max-sm:-mb-20">
           Report an Item </h1>
     <div className="min-h-screen flex items-center justify-center p-5">
       <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-md p-5">
