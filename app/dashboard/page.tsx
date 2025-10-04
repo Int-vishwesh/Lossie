@@ -19,7 +19,6 @@ const allItems = [
   { id: 'matched-1', type: 'Lost', status: 'Matched', name: 'My Keys', description: 'My lost house keys were matched with a found item. Contact info exchanged!', dateReported: '2023-10-15', imageUrl: defaultItemImage.src, matchedWith: 'found-item-id-xyz', },
   { id: 'matched-2', type: 'Found', status: 'Matched', name: 'Silver Bracelet', description: 'A silver chain bracelet I found was claimed by its owner.', dateReported: '2023-10-10', imageUrl: defaultItemImage.src, matchedWith: 'lost-item-id-abc', },
 ];
-// --- END DUMMY DATA ---
 
 
 export default function Dashboard() {
@@ -57,10 +56,13 @@ export default function Dashboard() {
             <p className="text-sm max-sm:text-[13px] text-gray-600">Found Items</p>
           </div>
           <div className="bg-orange-100 rounded-xl p-4 text-center shadow">
-            <p className="text-2xl font-bold text-purple-600">{matchedItems.length}</p>
+            <p className="text-2xl font-bold text-orange-600">{matchedItems.length}</p>
             <p className="text-sm max-sm:text-[13px] text-gray-600">Matches</p>
           </div>
         </div>
+      </div>
+      <div className="my-5 bg-gray-50 p-4 rounded-2xl shadow-md text-center">
+        <p className="text-md max-sm:text-[15px]">Can&apos;t find your item or wanna help others to find, <Link href={'/feed'} className="text-orange-400 hover:underline"> browse manually👀</Link> our community feed </p>
       </div>
 
       <div className="mt-8 space-y-8">

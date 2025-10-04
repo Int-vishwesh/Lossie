@@ -1,12 +1,13 @@
 @import "tailwindcss";
+
 body {
   @apply bg-orange-100;
 }
-/* Add this to src/app/globals.css */
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
