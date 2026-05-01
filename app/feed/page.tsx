@@ -9,19 +9,16 @@ import defaultItemImage from '../../public/lost.jpg';
 export default function FeedPage() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>("lost");
   
-  // Database & Search State
   const [dbItems, setDbItems] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
   
-  // Input State
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchImage, setSearchImage] = useState<File | null>(null);
   
-  // Loading States
   const [isLoading, setIsLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
 
-  // 1. Fetch the default community feed on load
+  // 1. Fetch the default feed
   useEffect(() => {
     const fetchFeed = async () => {
       try {
@@ -31,7 +28,7 @@ export default function FeedPage() {
           const mappedItems = json.data.map((item: any) => ({
             id: item.id,
             name: item.title,
-            type: item.category,
+            type: item.category ? item.category.toLowerCase() : 'lost',
             date: 'Recently', 
             imageUrl: item.image_url || defaultItemImage.src,
             status: item.status || 'pending'
@@ -47,43 +44,49 @@ export default function FeedPage() {
     fetchFeed();
   }, []);
 
-  // 2. The Auto-Trigger AI Image Search Function
+  // 2. The Clean, Dedicated Feed Search
   const handleImageUpload = async (file: File | null) => {
     setSearchImage(file);
     
-    // If they clicked the 'X' to remove the image, clear the AI results instantly!
     if (!file) {
       setSearchResults(null);
       return;
     }
 
-    // Otherwise, instantly trigger the AI backend!
     setIsSearching(true);
     try {
       const formData = new FormData();
-      formData.append("category", activeTab);
-      formData.append("description", searchTerm.trim() || "item"); 
+      
+      // Clean and honest: just the tab and the file!
+      formData.append("category", activeTab); 
       formData.append("file", file);
 
-      const response = await fetch("http://127.0.0.1:8000/find-matches", {
+      // Pointing to the brand new endpoint
+      const response = await fetch("http://127.0.0.1:8000/search-feed", {
         method: "POST",
         body: formData,
       });
 
       const data = await response.json();
       
-      const mappedMatches = (data.results || []).map((item: any) => ({
-        id: item.id,
-        name: item.title,
-        type: item.category,
-        date: 'Match Found',
-        imageUrl: item.image_url || defaultItemImage.src,
-        similarity: item.similarity
-      }));
+      const mappedMatches = (data.results || [])
+        .map((item: any) => {
+          // Look up the database to ensure we have the exact name and image
+          const realDbItem = dbItems.find(dbI => dbI.id === item.id);
+          return {
+            id: item.id,
+            name: item.title || (realDbItem ? realDbItem.name : "Item"),
+            type: activeTab, // Guaranteed to be the active tab
+            date: 'Match Found',
+            imageUrl: item.image_url || (realDbItem ? realDbItem.imageUrl : defaultItemImage.src),
+            similarity: item.similarity
+          };
+        })
+        .filter((item: any) => item.similarity >= 0.15); // The 15% smart threshold
       
       setSearchResults(mappedMatches);
     } catch (error) {
-      console.error("Search error:", error);
+      console.error("Feed Search error:", error);
     } finally {
       setIsSearching(false);
     }
@@ -96,21 +99,23 @@ export default function FeedPage() {
     setSearchImage(null);
   };
 
-  // 🔥 THE SEAMLESS HYBRID LOGIC 🔥
-  // We take either the AI results OR the Database feed, and instantly apply the text filter to it!
-  const baseItems = searchResults !== null ? searchResults : dbItems;
-  const itemsToDisplay = baseItems.filter(item => 
-    item.type === activeTab && 
-    item.status !== 'matched' &&
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) 
-  );
+  // 3. UI Guardrails
+  const itemsToDisplay = searchResults !== null 
+    ? searchResults.filter(item => 
+        item.type === activeTab && 
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : dbItems.filter(item => 
+        item.type === activeTab && 
+        item.status !== 'matched' &&
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+      );
 
   return (
     <div className="min-h-screen p-6 bg-slate-50">
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-8">
         
-        {/* Notice: No more <form> or Submit Button! Everything is instant. */}
         <div className="flex items-center w-full max-w-2xl bg-white rounded-full shadow-sm px-2 py-2 border border-slate-200 focus-within:border-[#2d132e] focus-within:ring-1 focus-within:ring-[#2d132e] transition-all">
           <Search className="w-5 h-5 text-gray-400 ml-3" />
           <input
@@ -177,11 +182,11 @@ export default function FeedPage() {
             {isSearching ? (
                <div className="flex flex-col items-center text-slate-400">
                  <Loader2 className="w-8 h-8 animate-spin text-[#dd7230] mb-3" />
-                 <p>AI is scanning vectors...</p>
+                 <p>AI is scanning visual vectors...</p>
                </div>
             ) : (
               <>
-                <p className="text-lg text-slate-500 font-medium">No items found.</p>
+                <p className="text-lg text-slate-500 font-medium">No items found in this category.</p>
                 {searchResults !== null && <button onClick={() => handleImageUpload(null)} className="mt-4 text-[#dd7230] hover:underline font-bold">Clear AI Search</button>}
               </>
             )}
