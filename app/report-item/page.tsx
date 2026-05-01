@@ -1,100 +1,189 @@
-
 "use client";
 
 import { useState } from 'react';
-import { UploadCloud } from 'lucide-react';
+import { UploadCloud, CheckCircle } from 'lucide-react';
 
 export default function ReportItemPage() {
+  // 1. Core State
   const [itemType, setItemType] = useState<'lost' | 'found'>('lost');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage({ text: '', type: '' });
+
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("category", itemType);
+      
+      if (imageFile) {
+        formData.append("file", imageFile);
+      }
+
+      const response = await fetch("http://127.0.0.1:8000/add-item", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.status === 400) {
+        setMessage({ text: data.detail, type: 'error' });
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Something went wrong!");
+      }
+
+      // Success!
+      setMessage({ text: "Item successfully saved to the database!", type: 'success' });
+      
+      // Optional: Clear the form after success
+      setTitle('');
+      setDescription('');
+      setImageFile(null);
+
+    } catch (error: any) {
+      setMessage({ text: "Failed to connect to the server. Is Python running?", type: 'error' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <><h1 className="text-3xl max-sm:text-xl mt-5 font-bold text-[#2d132e] text-center -mb-10 max-sm:-mb-20">
-          Report an Item </h1>
-    <div className="min-h-screen flex items-center justify-center p-5">
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-md p-5">
-        <p className="text-center text-slate-600 mb-5 max-sm:text-[12px]">
-          Fill out the details below to add an item to the feed.
-        </p>
+    <>
+      <h1 className="text-3xl max-sm:text-xl mt-5 font-bold text-[#2d132e] text-center -mb-10 max-sm:-mb-20">
+        Report an Item 
+      </h1>
+      <div className="min-h-screen flex items-center justify-center p-5">
+        <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-md p-5">
+          <p className="text-center text-slate-600 mb-5 max-sm:text-[12px]">
+            Fill out the details below to add an item to the feed.
+          </p>
 
-        <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-6">
-            <button
-              type="button"
-              onClick={() => setItemType('lost')}
-              className={`py-2 max-sm:text-sm rounded-md cursor-pointer font-semibold transition-all ${
-                itemType === 'lost' ? 'bg-[#2d132e] text-orange-100 shadow-md' : 'bg-gray-200 text-[#2d132e] '
-              }`}
-            >
-              I Lost Something
-            </button>
-            <button
-              type="button"
-              onClick={() => setItemType('found')}
-              className={`py-2 max-sm:text-sm rounded-md cursor-pointer font-semibold transition-all ${
-                itemType === 'found' ? 'bg-[#2d132e] text-orange-100  shadow-md' : 'bg-gray-200 text-[#2d132e] '
-              }`}
-            >
-              I Found Something
-            </button>
-          </div>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 gap-6">
+              <button
+                type="button"
+                onClick={() => setItemType('lost')}
+                className={`py-2 max-sm:text-sm rounded-md cursor-pointer font-semibold transition-all ${
+                  itemType === 'lost' ? 'bg-[#2d132e] text-orange-100 shadow-md' : 'bg-gray-200 text-[#2d132e] '
+                }`}
+              >
+                I Lost Something
+              </button>
+              <button
+                type="button"
+                onClick={() => setItemType('found')}
+                className={`py-2 max-sm:text-sm rounded-md cursor-pointer font-semibold transition-all ${
+                  itemType === 'found' ? 'bg-[#2d132e] text-orange-100  shadow-md' : 'bg-gray-200 text-[#2d132e] '
+                }`}
+              >
+                I Found Something
+              </button>
+            </div>
 
-          <div>
-            <label htmlFor="item-name" className="block text-[12px] font-medium text-slate-700 mb-1">
-              Item Name
-            </label>
-            <input
-              id="item-name"
-              type="text"
-              placeholder="e.g., Blue Water Bottle"
-              required
-              className="w-full max-sm:text-sm px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#2d132e] focus:border-brand-primary"
-            />
-          </div>
+            <div>
+              <label htmlFor="item-name" className="block text-[12px] font-medium text-slate-700 mb-1">
+                Item Name
+              </label>
+              <input
+                id="item-name"
+                type="text"
+                placeholder="e.g., Blue Water Bottle"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full max-sm:text-sm px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#2d132e] focus:border-[#2d132e] outline-none"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="description" className="block text-[12px] font-medium text-slate-700 mb-1">
-              Description
-            </label>
-            <textarea
-              id="description"
-              rows={4}
-              placeholder="Provide details like color, brand, location, and any unique features, details as much as possible..."
-              className="w-full max-sm:text-sm px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-brand-primary focus:border-brand-primary"
-              required
-            ></textarea>
-          </div>
+            <div>
+              <label htmlFor="description" className="block text-[12px] font-medium text-slate-700 mb-1">
+                Description
+              </label>
+              <textarea
+                id="description"
+                rows={4}
+                placeholder="Provide details like color, brand, location, and any unique features, details as much as possible..."
+                className="w-full max-sm:text-sm px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-[#2d132e] focus:border-[#2d132e] outline-none"
+                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
 
-          <div>
-            <label className="block text-[12px] font-medium text-slate-700 mb-2">
-              Upload the item&apos;s photo
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-0 text-center">
-                <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="flex text-sm text-gray-500">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-brand-primary hover:text-brand-primary/80 focus-within:outline-none"
-                  >
-                    <span className='hover:text-black text-slate-800'>Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
+            <div>
+              <label className="block text-[12px] font-medium text-slate-700 mb-2">
+                Upload the item&apos;s photo (Optional)
+              </label>
+              <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${imageFile ? 'border-[#dd7230] bg-orange-50' : 'border-gray-300'} border-dashed rounded-md transition-colors`}>
+                <div className="space-y-2 text-center">
+                  
+                  {/* Show a Checkmark if file is selected, else show Cloud icon */}
+                  {imageFile ? (
+                    <CheckCircle className="mx-auto h-12 w-12 text-[#dd7230]" />
+                  ) : (
+                    <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
+                  )}
+
+                  <div className="flex text-sm text-gray-500 justify-center">
+                    <label
+                      htmlFor="file-upload"
+                      className="relative cursor-pointer rounded-md font-medium text-[#dd7230] hover:text-[#2d132e] focus-within:outline-none"
+                    >
+                      <span>{imageFile ? "Change file" : "Upload a file"}</span>
+                      <input 
+                        id="file-upload" 
+                        name="file-upload" 
+                        type="file" 
+                        accept="image/png, image/jpeg, image/webp"
+                        className="sr-only" 
+                        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                      />
+                    </label>
+                    {!imageFile && <p className="pl-1 text-slate-800">or drag and drop</p>}
+                  </div>
+                  
+                  {/* Show the selected filename */}
+                  {imageFile ? (
+                    <p className="text-xs text-slate-700 font-medium">{imageFile.name}</p>
+                  ) : (
+                    <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+                  )}
                 </div>
-                <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
               </div>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="w-full max-sm:text-sm h-11 px-8 py-2 bg-[#2d132e] text-white font-medium rounded-md hover:bg-[#2d132e]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
-          >
-            Submit Report
-          </button>
-        </form>
+            {/* AI Bouncer / Success Messages */}
+            {message.text && (
+              <div className={`p-3 rounded-md text-sm font-medium ${
+                message.type === 'error' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'
+              }`}>
+                {message.text}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full max-sm:text-sm h-11 px-8 py-2 text-white font-medium rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2d132e] ${
+                isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#2d132e] hover:bg-[#2d132e]/80'
+              }`}
+            >
+              {isLoading ? "Analyzing & Saving..." : "Submit Report"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
     </>
   );
 }

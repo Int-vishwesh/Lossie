@@ -1,84 +1,113 @@
-// app/dashboard/page.tsx
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link"; 
+import { Loader2, Sparkles } from "lucide-react";
 
 import defaultItemImage from '../../public/lost.jpg'; 
 
-// --- DUMMY DATA ---
-const allItems = [
-  { id: 'lost-1', type: 'Lost', status: 'Pending Match', name: 'Blue Sigg Water Bottle', description: 'Dark blue, 1L capacity, with a black sports cap. Lost near the university library entrance.', dateReported: '2023-10-26', imageUrl: defaultItemImage.src, },
-  { id: 'lost-2', type: 'Lost', status: 'Pending Match', name: 'Reading Glasses', description: 'Black framed reading glasses, prescription, left on a table in the cafeteria.', dateReported: '2023-10-24', imageUrl: defaultItemImage.src, },
-  { id: 'lost-3', type: 'Lost', status: 'Pending Match', name: 'USB Drive (Kingston)', description: 'Silver Kingston USB drive, 64GB. Contains important project files. Lost in Computer Lab B.', dateReported: '2023-10-22', imageUrl: defaultItemImage.src, },
-  { id: 'lost-4', type: 'Lost', status: 'Pending Match', name: 'Leather Gloves', description: 'Black leather gloves, size Medium. Lost near the main campus gates.', dateReported: '2023-10-20', imageUrl: defaultItemImage.src, },
-  { id: 'lost-5', type: 'Lost', status: 'Pending Match', name: 'Small Notebook', description: 'A small Moleskine notebook, black cover, filled with notes. Lost in classroom 301.', dateReported: '2023-10-18', imageUrl: defaultItemImage.src, },
-  { id: 'lost-6', type: 'Lost', status: 'Pending Match', name: 'Something', description: 'A small Moleskine notebook, black cover, filled with notes. Lost in classroom 301.', dateReported: '2023-10-18', imageUrl: defaultItemImage.src, },
-  { id: 'found-1', type: 'Found', status: 'Waiting for Claim', name: 'Black Leather Wallet', description: 'Found a black leather wallet with no ID, only some cash. On the bench outside the main building.', dateReported: '2023-10-25', imageUrl: defaultItemImage.src, },
-  { id: 'found-2', type: 'Found', status: 'Waiting for Claim', name: 'Single AirPod (Right)', description: 'Found a single Apple AirPod (right earbud) near the sports field.', dateReported: '2023-10-23', imageUrl: defaultItemImage.src, },
-  { id: 'found-3', type: 'Found', status: 'Waiting for Claim', name: 'Keys on a Lanyard', description: 'Set of keys on a red university lanyard. Found near the student dorms.', dateReported: '2023-10-21', imageUrl: defaultItemImage.src, },
-  { id: 'matched-1', type: 'Lost', status: 'Matched', name: 'My Keys', description: 'My lost house keys were matched with a found item. Contact info exchanged!', dateReported: '2023-10-15', imageUrl: defaultItemImage.src, matchedWith: 'found-item-id-xyz', },
-  { id: 'matched-2', type: 'Found', status: 'Matched', name: 'Silver Bracelet', description: 'A silver chain bracelet I found was claimed by its owner.', dateReported: '2023-10-10', imageUrl: defaultItemImage.src, matchedWith: 'lost-item-id-abc', },
-];
-
-
 export default function Dashboard() {
-  const lostItems = allItems.filter(item => item.type === 'Lost' && item.status !== 'Matched');
-  const foundItems = allItems.filter(item => item.type === 'Found' && item.status !== 'Matched');
-  const matchedItems = allItems.filter(item => item.status === 'Matched');
+  const [dbItems, setDbItems] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 1. Fetch items straight from the DB
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/items");
+        const json = await res.json();
+        
+        if (json.data) {
+          const mappedItems = json.data.map((item: any) => ({
+            id: item.id,
+            type: item.category === 'lost' ? 'Lost' : 'Found',
+            status: item.status || 'pending', // Pulls the REAL status from Supabase
+            name: item.title,
+            description: item.description,
+            imageUrl: item.image_url || defaultItemImage.src,
+          }));
+          setDbItems(mappedItems);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard items:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  // 2. Filter exactly how you designed it!
+  const lostItems = dbItems.filter(item => item.type === 'Lost' && item.status !== 'matched');
+  const foundItems = dbItems.filter(item => item.type === 'Found' && item.status !== 'matched');
+  const matchedItems = dbItems.filter(item => item.status === 'matched');
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="w-10 h-10 animate-spin text-[#dd7230]" />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen px-20 max-sm:px-10 p-6">
-      <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
+    <div className="min-h-screen px-20 max-sm:px-10 p-6 bg-slate-50">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
         <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-          <div className="w-32 h-32 rounded-full border-4 border-gray-300 overflow-hidden flex-shrink-0">
-            <Image
-              src="/yapp.png" 
-              alt="Profile"
-              width={200}
-              height={100}
-              className="object-cover w-full h-full"
-            />
+          <div className="w-32 h-32 rounded-full border-4 border-gray-200 overflow-hidden flex-shrink-0 bg-gray-100 shadow-inner">
+            <Image src="/yapp.png" alt="Profile" width={200} height={100} className="object-cover w-full h-full" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">Jerry Aryan</h2>
+            <h2 className="text-xl font-bold text-[#2d132e]">Jerry Aryan</h2>
             <p className="text-gray-600">B.Tech CSE Department</p>
-            <p className="text-gray-600">Roll: 2230896</p>
-            <p className="text-gray-600">Day Scholar</p>
+            <p className="text-gray-500 text-sm">Roll: 2230896 • Day Scholar</p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 mt-5 md:mt-0">
-          <div className="bg-blue-100 rounded-xl p-4 text-center shadow">
-            <p className="text-2xl font-bold text-blue-600">{lostItems.length}</p>
-            <p className="text-sm max-sm:text-[13px] text-gray-600">Lost Items</p>
+        <div className="grid grid-cols-3 gap-4 mt-5 md:mt-0">
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-center shadow-sm">
+            <p className="text-2xl font-black text-blue-600">{lostItems.length}</p>
+            <p className="text-xs font-bold uppercase text-blue-800 tracking-wider">Lost</p>
           </div>
-          <div className="bg-green-100 rounded-xl p-4 text-center shadow">
-            <p className="text-2xl font-bold text-green-600">{foundItems.length}</p>
-            <p className="text-sm max-sm:text-[13px] text-gray-600">Found Items</p>
+          <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-center shadow-sm">
+            <p className="text-2xl font-black text-green-600">{foundItems.length}</p>
+            <p className="text-xs font-bold uppercase text-green-800 tracking-wider">Found</p>
           </div>
-          <div className="bg-orange-100 rounded-xl p-4 text-center shadow">
-            <p className="text-2xl font-bold text-orange-600">{matchedItems.length}</p>
-            <p className="text-sm max-sm:text-[13px] text-gray-600">Matches</p>
+          <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 text-center shadow-sm">
+            <p className="text-2xl font-black text-orange-600">{matchedItems.length}</p>
+            <p className="text-xs font-bold uppercase text-orange-800 tracking-wider">Matches</p>
           </div>
         </div>
-      </div>
-      <div className="my-5 bg-gray-50 p-4 rounded-2xl shadow-md text-center">
-        <p className="text-md max-sm:text-[15px]">Can&apos;t find your item or wanna help others to find, <Link href={'/feed'} className="text-orange-400 hover:underline"> browse manually👀</Link> our community feed </p>
       </div>
 
-      <div className="mt-8 space-y-8">
+      <div className="my-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100 text-center">
+        <p className="text-sm text-slate-600">
+          Can't find your item? <Link href={'/feed'} className="text-[#dd7230] hover:underline font-bold"> Browse manually 👀</Link> in our community feed.
+        </p>
+      </div>
+
+      <div className="mt-8 space-y-10">
+        
+        {/* 1. MATCHED SECTION */}
         <section>
-          <h3 className="text-lg font-semibold mb-4">Matched List</h3>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="p-2 bg-orange-100 rounded-lg text-orange-600"><Sparkles size={18} /></div>
+            <h3 className="text-xl font-bold text-[#2d132e]">AI Matched Items</h3>
+          </div>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 max-sm:gap-3 space-x-4">
+            <div className="flex gap-6 space-x-2">
               {matchedItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500">No matched items yet!</p>
+                <p className="w-full text-center text-gray-500 bg-white py-8 rounded-xl border border-dashed border-gray-300">
+                  No AI matches confirmed yet. We continuously scan new reports!
+                </p>
               ) : (
                 matchedItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[18vw] xl:w-[15vw] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-xl flex flex-col items-center justify-center shadow-sm hover:shadow-lg transition-shadow p-2">
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={100} className="object-cover rounded-md mb-2" />
-                      <p className="text-sm font-medium text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-purple-600 mt-1">Matched!</span>
+                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[200px] flex-shrink-0 group">
+                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border-2 border-orange-300 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-[#dd7230]"></div>
+                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-28 w-full bg-slate-100" />
+                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
+                      <span className="text-xs text-orange-600 mt-1 font-extrabold uppercase tracking-widest">Matched!</span>
                     </div>
                   </Link>
                 ))
@@ -87,19 +116,20 @@ export default function Dashboard() {
           </div>
         </section>
 
+        {/* 2. FOUND SECTION */}
         <section>
-          <h3 className="text-lg font-semibold mb-4">Found List</h3>
+          <h3 className="text-xl font-bold text-[#2d132e] mb-4">Items You Found</h3>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 max-sm:gap-3 space-x-4">
+            <div className="flex gap-6 space-x-2">
               {foundItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500">No items you&apos;ve found yet!</p>
+                <p className="w-full text-center text-gray-500">No pending found items.</p>
               ) : (
                 foundItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[18vw] xl:w-[15vw] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow p-2">
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={60} className="object-cover rounded-md mb-2" />
-                      <p className="text-sm font-medium text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-green-600 mt-1">Found</span>
+                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[180px] flex-shrink-0">
+                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border border-green-100">
+                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-24 w-full bg-slate-100" />
+                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
+                      <span className="text-xs text-green-600 mt-1 font-bold uppercase tracking-wider">Found</span>
                     </div>
                   </Link>
                 ))
@@ -108,19 +138,20 @@ export default function Dashboard() {
           </div>
         </section>
 
+        {/* 3. LOST SECTION */}
         <section>
-          <h3 className="text-lg font-semibold mb-4">Lost List</h3>
+          <h3 className="text-xl font-bold text-[#2d132e] mb-4">Items You Lost</h3>
           <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-10 max-sm:gap-3 space-x-4">
+            <div className="flex gap-6 space-x-2">
               {lostItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500">No items you&apos;ve lost yet!</p>
+                <p className="w-full text-center text-gray-500">No pending lost items.</p>
               ) : (
                 lostItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[18vw] xl:w-[15vw] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow p-2">
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={60} className="object-cover rounded-md mb-2" />
-                      <p className="text-sm font-medium text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-blue-600 mt-1">Lost</span>
+                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[180px] flex-shrink-0">
+                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border border-blue-100">
+                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-24 w-full bg-slate-100" />
+                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
+                      <span className="text-xs text-blue-600 mt-1 font-bold uppercase tracking-wider">Lost</span>
                     </div>
                   </Link>
                 ))
@@ -132,3 +163,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
