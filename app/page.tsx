@@ -45,7 +45,7 @@ export default function LandingPage() {
             </p>
             <div className="pt-4">
               <Link 
-                href="/signup" 
+                href="/login" 
                 className="inline-block border-2 border-[#2d132e] rounded-full px-8 py-3 bg-[#2d132e] text-white font-sans font-semibold hover:bg-[#dd7230] hover:text-[#2d132e] hover:border-[#dd7230] transition-all duration-300 transform hover:scale-105 text-sm sm:text-base">
                 Get Started
               </Link>
