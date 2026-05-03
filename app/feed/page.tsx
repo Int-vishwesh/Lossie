@@ -112,7 +112,7 @@ export default function FeedPage() {
       );
 
   return (
-    <div className="min-h-screen p-6 bg-slate-50">
+    <div className="min-h-screen p-6 bg-orange-100">
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-8">
         

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { UploadCloud, CheckCircle } from 'lucide-react';
+import { createClient } from "@/next-backend/supabase/client"; 
 
 export default function ReportItemPage() {
-  // 1. Core State
   const [itemType, setItemType] = useState<'lost' | 'found'>('lost');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -19,10 +19,18 @@ export default function ReportItemPage() {
     setMessage({ text: '', type: '' });
 
     try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error("You must be logged in!");
+      }
+      
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
       formData.append("category", itemType);
+      formData.append("user_id", user.id);
       
       if (imageFile) {
         formData.append("file", imageFile);
@@ -34,13 +42,19 @@ export default function ReportItemPage() {
       });
 
       const data = await response.json();
-      if (response.status === 400) {
-        setMessage({ text: data.detail, type: 'error' });
-        return;
-      }
-
+      
       if (!response.ok) {
-        throw new Error(data.detail || "Something went wrong!");
+        if (response.status === 422) {
+          const errorField = data.detail[0]?.loc[1] || "unknown field";
+          const errorMsg = data.detail[0]?.msg || "Invalid data";
+          throw new Error(`FastAPI Error: '${errorField}' is ${errorMsg}`);
+        }
+        
+        if (typeof data.detail === "string") {
+          throw new Error(data.detail);
+        }
+        
+        throw new Error("Something went wrong on the server!");
       }
 
       // Success!
@@ -52,7 +66,8 @@ export default function ReportItemPage() {
       setImageFile(null);
 
     } catch (error: any) {
-      setMessage({ text: "Failed to connect to the server. Is Python running?", type: 'error' });
+      console.error("Submission Error:", error);
+      setMessage({ text: error.message || "An unexpected error occurred.", type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -128,7 +143,6 @@ export default function ReportItemPage() {
               <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${imageFile ? 'border-[#dd7230] bg-orange-50' : 'border-gray-300'} border-dashed rounded-md transition-colors`}>
                 <div className="space-y-2 text-center">
                   
-                  {/* Show a Checkmark if file is selected, else show Cloud icon */}
                   {imageFile ? (
                     <CheckCircle className="mx-auto h-12 w-12 text-[#dd7230]" />
                   ) : (
@@ -185,5 +199,5 @@ export default function ReportItemPage() {
         </div>
       </div>
     </>
-  );
+  ); 
 }

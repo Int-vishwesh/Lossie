@@ -1,166 +1,220 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/next-backend/supabase/client";
+import { Loader2, Plus, Search, CheckCircle2, AlertCircle, PackageOpen } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link"; 
-import { Loader2, Sparkles } from "lucide-react";
+import Link from "next/link";
 
-import defaultItemImage from '../../public/lost.jpg'; 
+// Defining the shape of our data based on your Python backend
+type Item = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image_url: string | null;
+  status: string;
+};
 
-export default function Dashboard() {
-  const [dbItems, setDbItems] = useState<any[]>([]);
+export default function DashboardPage() {
+  const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // 1. Fetch items straight from the DB
+  const supabase = createClient();
+
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchMyItems = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/items");
-        const json = await res.json();
+        // 1. Get the logged-in user securely
+        const { data: { user } } = await supabase.auth.getUser();
         
-        if (json.data) {
-          const mappedItems = json.data.map((item: any) => ({
-            id: item.id,
-            type: item.category === 'lost' ? 'Lost' : 'Found',
-            status: item.status || 'pending', // Pulls the REAL status from Supabase
-            name: item.title,
-            description: item.description,
-            imageUrl: item.image_url || defaultItemImage.src,
-          }));
-          setDbItems(mappedItems);
+        if (!user) {
+          throw new Error("User not found");
         }
-      } catch (error) {
-        console.error("Failed to fetch dashboard items:", error);
+
+        // 2. Fetch their specific items from FastAPI
+        const response = await fetch(`http://127.0.0.1:8000/my-items/${user.id}`);
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch items from server");
+        }
+
+        const result = await response.json();
+        setItems(result.data || []);
+
+      } catch (err: any) {
+        setError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchItems();
+    fetchMyItems();
   }, []);
 
-  // 2. Filter exactly how you designed it!
-  const lostItems = dbItems.filter(item => item.type === 'Lost' && item.status !== 'matched');
-  const foundItems = dbItems.filter(item => item.type === 'Found' && item.status !== 'matched');
-  const matchedItems = dbItems.filter(item => item.status === 'matched');
-
+  // EXACT LOADER YOU REQUESTED
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="w-10 h-10 animate-spin text-[#dd7230]" />
+      <div className="min-h-screen bg-orange-100 flex flex-col items-center justify-center">
+        <Loader2 className="w-10 h-10 text-[#dd7230] animate-spin mb-4" />
+        <p className="text-[#2d132e] font-semibold animate-pulse">Loading your dashboard...</p>
       </div>
     );
   }
 
+  // Calculate stats for the user profile
+  const lostCount = items.filter(item => item.category === 'lost').length;
+  const foundCount = items.filter(item => item.category === 'found').length;
+  const matchCount = items.filter(item => item.status === 'matched').length;
+
   return (
-    <div className="min-h-screen px-20 max-sm:px-10 p-6 bg-slate-50">
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
-        <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-          <div className="w-32 h-32 rounded-full border-4 border-gray-200 overflow-hidden flex-shrink-0 bg-gray-100 shadow-inner">
-            <Image src="/yapp.png" alt="Profile" width={200} height={100} className="object-cover w-full h-full" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-[#2d132e]">Jerry Aryan</h2>
-            <p className="text-gray-600">B.Tech CSE Department</p>
-            <p className="text-gray-500 text-sm">Roll: 2230896 • Day Scholar</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-4 mt-5 md:mt-0">
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-2xl font-black text-blue-600">{lostItems.length}</p>
-            <p className="text-xs font-bold uppercase text-blue-800 tracking-wider">Lost</p>
-          </div>
-          <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-2xl font-black text-green-600">{foundItems.length}</p>
-            <p className="text-xs font-bold uppercase text-green-800 tracking-wider">Found</p>
-          </div>
-          <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-2xl font-black text-orange-600">{matchedItems.length}</p>
-            <p className="text-xs font-bold uppercase text-orange-800 tracking-wider">Matches</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="my-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100 text-center">
-        <p className="text-sm text-slate-600">
-          Can't find your item? <Link href={'/feed'} className="text-[#dd7230] hover:underline font-bold"> Browse manually 👀</Link> in our community feed.
-        </p>
-      </div>
-
-      <div className="mt-8 space-y-10">
+    <div className="min-h-screen bg-orange-100 p-6 md:p-12 font-sans">
+      <div className="max-w-6xl mx-auto">
         
-        {/* 1. MATCHED SECTION */}
-        <section>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-orange-100 rounded-lg text-orange-600"><Sparkles size={18} /></div>
-            <h3 className="text-xl font-bold text-[#2d132e]">AI Matched Items</h3>
-          </div>
-          <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-6 space-x-2">
-              {matchedItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500 bg-white py-8 rounded-xl border border-dashed border-gray-300">
-                  No AI matches confirmed yet. We continuously scan new reports!
-                </p>
-              ) : (
-                matchedItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[200px] flex-shrink-0 group">
-                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border-2 border-orange-300 relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-[#dd7230]"></div>
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-28 w-full bg-slate-100" />
-                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-orange-600 mt-1 font-extrabold uppercase tracking-widest">Matched!</span>
-                    </div>
-                  </Link>
-                ))
-              )}
+        {/* ========================================== */}
+        {/* ADDED: USER PROFILE & STATS HEADER         */}
+        {/* ========================================== */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+          <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full border-4 border-slate-100 overflow-hidden flex-shrink-0 bg-slate-50 shadow-inner relative">
+              <Image src="/yapp.png" alt="Profile" fill className="object-cover" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-[#2d132e] mb-1">Jerry Aryan</h2>
+              <p className="text-slate-600 font-medium text-sm md:text-base">B.Tech CSE Department</p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-2">
+                <span className="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">Roll: 2230896</span>
+                <span className="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">Day Scholar</span>
+              </div>
             </div>
           </div>
-        </section>
+          
+          <div className="grid grid-cols-3 gap-3 w-full md:w-auto">
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 md:p-4 text-center shadow-sm">
+              <p className="text-2xl font-black text-blue-600">{lostCount}</p>
+              <p className="text-[10px] md:text-xs font-bold uppercase text-blue-800 tracking-wider mt-1">Lost</p>
+            </div>
+            <div className="bg-green-50 border border-green-100 rounded-xl p-3 md:p-4 text-center shadow-sm">
+              <p className="text-2xl font-black text-green-600">{foundCount}</p>
+              <p className="text-[10px] md:text-xs font-bold uppercase text-green-800 tracking-wider mt-1">Found</p>
+            </div>
+            <div className="bg-orange-50 border border-orange-100 rounded-xl p-3 md:p-4 text-center shadow-sm">
+              <p className="text-2xl font-black text-orange-600">{matchCount}</p>
+              <p className="text-[10px] md:text-xs font-bold uppercase text-orange-800 tracking-wider mt-1">Matches</p>
+            </div>
+          </div>
+        </div>
 
-        {/* 2. FOUND SECTION */}
-        <section>
-          <h3 className="text-xl font-bold text-[#2d132e] mb-4">Items You Found</h3>
-          <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-6 space-x-2">
-              {foundItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500">No pending found items.</p>
-              ) : (
-                foundItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[180px] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border border-green-100">
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-24 w-full bg-slate-100" />
-                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-green-600 mt-1 font-bold uppercase tracking-wider">Found</span>
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-black text-[#2d132e]">My Uploads</h1>
+            <p className="text-slate-500 mt-1 font-medium">Track your reported lost and found items.</p>
           </div>
-        </section>
+          
+          <Link 
+            href="/report-item" 
+            className="bg-[#dd7230] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#c56024] transition-all flex items-center gap-2 shadow-md hover:shadow-lg w-full md:w-auto justify-center"
+          >
+            <Plus size={20} />
+            Report New Item
+          </Link>
+        </div>
 
-        {/* 3. LOST SECTION */}
-        <section>
-          <h3 className="text-xl font-bold text-[#2d132e] mb-4">Items You Lost</h3>
-          <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-6 space-x-2">
-              {lostItems.length === 0 ? (
-                <p className="w-full text-center text-gray-500">No pending lost items.</p>
-              ) : (
-                lostItems.map((item) => (
-                  <Link href={`/dashboard/items/${item.id}`} key={item.id} className="block w-[180px] flex-shrink-0">
-                    <div className="w-full aspect-square bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all p-3 border border-blue-100">
-                      <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="object-cover rounded-xl mb-3 h-24 w-full bg-slate-100" />
-                      <p className="text-sm font-bold text-[#2d132e] text-center line-clamp-1">{item.name}</p>
-                      <span className="text-xs text-blue-600 mt-1 font-bold uppercase tracking-wider">Lost</span>
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
+        {error && (
+          <div className="bg-red-50 text-red-500 p-4 rounded-xl mb-8 border border-red-100 flex items-center gap-3">
+            <AlertCircle size={20} />
+            <span className="font-semibold">{error}</span>
           </div>
-        </section>
+        )}
+
+        {/* EMPTY STATE */}
+        {items.length === 0 && !error && (
+          <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-16 text-center flex flex-col items-center">
+            <div className="bg-slate-100 p-4 rounded-full mb-4 text-slate-400">
+              <PackageOpen size={48} />
+            </div>
+            <h3 className="text-xl font-bold text-[#2d132e] mb-2">No items reported yet</h3>
+            <p className="text-slate-500 max-w-md mx-auto mb-6">
+              You haven't uploaded any lost or found items. When you do, they will appear here so you can track their AI match status!
+            </p>
+            <Link 
+              href="/report-item" 
+              className="text-[#dd7230] font-bold hover:underline flex items-center gap-1"
+            >
+              Report your first item <Plus size={16} />
+            </Link>
+          </div>
+        )}
+
+        {/* ITEMS GRID - NOW CLICKABLE WITH HOVER EFFECTS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map((item) => {
+            const isMatched = item.status === "matched";
+            const isLost = item.category === "lost";
+
+            return (
+              <Link 
+                href={`/item/${item.id}`} 
+                key={item.id} 
+                className="block group"
+              >
+                <div 
+                  className={`bg-white rounded-2xl overflow-hidden border transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1 flex flex-col h-full ${
+                    isMatched ? "border-green-400 shadow-green-100 shadow-lg" : "border-slate-100 shadow-sm"
+                  }`}
+                >
+                  {/* Image Section */}
+                  <div className="relative h-48 w-full bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {item.image_url ? (
+                      <Image 
+                        src={item.image_url} 
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <Search className="w-12 h-12 text-slate-300 group-hover:scale-110 transition-transform duration-500" />
+                    )}
+                    
+                    {/* Category Badge (Top Left) */}
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-[#2d132e] shadow-sm">
+                      {isLost ? "🔴 Lost" : "🟢 Found"}
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-xl font-bold text-[#2d132e] mb-2 line-clamp-1 group-hover:text-[#dd7230] transition-colors">{item.title}</h3>
+                    <p className="text-slate-500 text-sm mb-6 line-clamp-2 flex-grow">{item.description}</p>
+                    
+                    {/* Status Indicator */}
+                    <div className={`flex items-center justify-center gap-2 p-3 rounded-xl font-bold text-sm mt-auto ${
+                      isMatched 
+                        ? "bg-green-50 text-green-700" 
+                        : "bg-slate-50 text-slate-500"
+                    }`}>
+                      {isMatched ? (
+                        <>
+                          <CheckCircle2 className="w-5 h-5 text-green-500" />
+                          AI MATCH FOUND!
+                        </>
+                      ) : (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Scanning campus network...
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+        
       </div>
     </div>
   );
 }
-

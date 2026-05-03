@@ -12,9 +12,9 @@ const Navbar = () => {
   }
 
   return (
-    <div className={`flex justify-between transition-colors duration-300 ${isOpen ? "bg-white" : "bg-transparent"} `}>
+    <div className={`flex justify-between transition-colors duration-300 ${isOpen ? "bg-orange-100 md:!bg-transparent" : "bg-transparent"} `}>
       <div className='ml-1 z-10 flex flex-col'>
-        <Link href={'/landing'}>
+        <Link href={'/'}>
           <Image src={"/logo.png"} alt="lossie logo" width={110} height={20} className='max-sm:h-9 max-sm:w-20 -mt-1'/> 
         </Link>
         <div className='flex gap-1 -mt-3 max-sm:-mt-2 ml-[18px] max-sm:ml-[12px]'>
