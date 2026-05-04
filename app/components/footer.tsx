@@ -69,7 +69,7 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/40 mb-4">Connect</h4>
             <div className="flex items-center gap-3 mb-5">
               <a 
-                href="https://github.com/Jerryaryan123" 
+                href="https://github.com/int-vishwesh" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-[#dd7230] flex items-center justify-center transition-colors"

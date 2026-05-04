@@ -87,10 +87,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-orange-100">
-      
-      {/* ========================== */}
-      {/* LEFT SIDE: THE AUTH FORM   */}
-      {/* ========================== */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 z-10 overflow-y-auto">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl lg:shadow-none lg:bg-transparent lg:border-none border border-slate-100 p-6 lg:p-0 my-4">
           
@@ -105,14 +101,13 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* ERROR MESSAGE BOX */}
+          {/* error msg */}
           {error && (
             <div className="bg-red-50 text-red-500 text-xs p-2.5 rounded-lg mb-4 border border-red-100 font-medium">
               {error}
             </div>
           )}
 
-          {/* SUCCESS MESSAGE BOX */}
           {successMessage && (
             <div className="bg-green-50 text-green-700 text-xs p-2.5 rounded-lg mb-4 border border-green-200 flex items-start gap-2">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-green-500" />
@@ -120,7 +115,6 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* GITHUB BUTTON */}
           <button
             onClick={handleGithubLogin}
             disabled={isGithubLoading || isLoading}
@@ -130,7 +124,6 @@ export default function LoginPage() {
             Continue with GitHub
           </button>
 
-          {/* DIVIDER */}
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-slate-200" />
@@ -140,13 +133,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* EMAIL/PASSWORD FORM */}
           <form onSubmit={handleAuth} className="space-y-3">
-            
-            {/* --- EXTRA FIELDS (ONLY VISIBLE DURING SIGNUP) --- */}
             {!isLogin && (
               <div className="space-y-3 animate-in fade-in slide-in-from-top-4 duration-300">
-                {/* Roll No */}
                 <div>
                   <label className="block text-xs font-bold text-[#2d132e] mb-1 ml-1">Roll Number</label>
                   <div className="relative">
@@ -162,7 +151,6 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Department */}
                 <div>
                   <label className="block text-xs font-bold text-[#2d132e] mb-1 ml-1">Department</label>
                   <div className="relative">
@@ -178,7 +166,6 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Residence Type */}
                 <div>
                   <label className="block text-xs font-bold text-[#2d132e] mb-1 ml-1">Residence Status</label>
                   <div className="flex gap-2">
@@ -223,7 +210,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* --- STANDARD EMAIL & PASSWORD --- */}
+            {/* email & password */}
             <div>
               <label className="block text-xs font-bold text-[#2d132e] mb-1 ml-1">Email Address</label>
               <div className="relative">
@@ -282,9 +269,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ========================== */}
-      {/* RIGHT SIDE: THE UI BANNER  */}
-      {/* ========================== */}
+      {/* banner */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-orange-100 items-center justify-center p-12 border-l border-orange-200">
         <div className="relative -mt-6 w-full max-w-lg aspect-square">
           <Image 

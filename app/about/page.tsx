@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-orange-100 overflow-x-hidden">
 
-      {/* ── About Header ── */}
+      {/* about header */}
       <section className="px-6 sm:px-12 pt-14 pb-16 lg:pt-20 lg:pb-20">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl sm:text-4xl font-black text-[#2d132e] mb-3">About Lossie</h1>
@@ -42,7 +42,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Features Grid ── */}
+      {/* features */}
       <section className="px-6 sm:px-12 pb-20">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-black text-[#2d132e] text-center mb-12">
@@ -115,7 +115,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Stats Strip ── */}
+      {/* stats */}
       <section className="px-6 sm:px-12 pb-20">
         <div className="max-w-5xl mx-auto">
           <div className="bg-[#2d132e] rounded-3xl p-8 sm:p-12 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
@@ -133,17 +133,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Origin Story ── */}
+      {/* origin story */}
       <section className="px-6 sm:px-12 pb-20">
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-5">
-              {/* Accent bar */}
               <div className="lg:col-span-2 bg-gradient-to-br from-[#2d132e] to-[#5a2d5e] p-8 sm:p-12 flex flex-col justify-center">
                 <h2 className="text-2xl sm:text-3xl font-black text-white mb-4">The Story Behind Lossie</h2>
                 <p className="text-white/60 text-sm font-medium">From a campus problem to an AI solution.</p>
               </div>
-              {/* Content */}
               <div className="lg:col-span-3 p-8 sm:p-12 flex items-center">
                 <div>
                   <p className="text-slate-600 leading-relaxed mb-4">
@@ -162,7 +160,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── CTA Section ── */}
+      {/* cta */}
       <section className="px-6 sm:px-12 pb-24">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-black text-[#2d132e] mb-4">
@@ -180,16 +178,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Developer Section ── */}
+      {/* developer */}
       <section className="px-6 sm:px-12 pb-24">
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-10 max-w-2xl mx-auto">
-            {/* Avatar */}
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-orange-100 overflow-hidden flex-shrink-0 bg-slate-50 shadow-inner relative">
               <img src="/yapp.png" alt="Vishwesh" className="w-full h-full object-cover" />
             </div>
-
-            {/* Info */}
             <div className="text-center sm:text-left">
               <h3 className="text-xl font-black text-[#2d132e] mb-1">Vishwesh</h3>
               <p className="text-[#dd7230] font-semibold text-sm mb-3">Creator & Developer</p>

@@ -57,7 +57,6 @@ export default function ReportItemPage() {
         throw new Error("Something went wrong on the server!");
       }
 
-      // Success!
       setMessage({ text: "Item successfully saved to the database!", type: 'success' });
 
       // Optional: Clear the form after success
@@ -76,7 +75,7 @@ export default function ReportItemPage() {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="w-full max-w-2xl mx-auto -mt-8">
           <h1 className="text-2xl max-sm:text-xl font-bold text-[#2d132e] text-center mb-4">
             Report an Item
           </h1>

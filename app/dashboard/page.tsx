@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // --- Profile States ---
+  // profile states
   const [profile, setProfile] = useState({
     name: "Loading...",
     department: "Student",
@@ -28,18 +28,17 @@ export default function DashboardPage() {
     residence: "Campus User"
   });
 
-  // --- Edit Mode States ---
+  //edit mode stats
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editForm, setEditForm] = useState({
     department: "",
     rollNo: "",
-    residence: "day_scholar" // "hosteller" or "day_scholar"
+    residence: "day_scholar"
   });
 
   const supabase = createClient();
 
-  // 1. FETCH DATA ON LOAD
   useEffect(() => {
     const fetchMyItems = async () => {
       try {
@@ -49,7 +48,6 @@ export default function DashboardPage() {
         const meta = user.user_metadata || {};
         const emailName = user.email ? user.email.split('@')[0] : "Student";
         
-        // Use full name from GitHub if available, else fallback to email prefix
         const displayName = meta.full_name || emailName;
 
         const currentProfile = {
@@ -154,7 +152,7 @@ export default function DashboardPage() {
                 )}
               </div>
               
-              {/* --- VIEW MODE --- */}
+              {/* view mode */}
               {!isEditing ? (
                 <>
                   <p className="text-slate-600 font-medium text-sm ml-2 md:text-base mb-2">
@@ -170,7 +168,7 @@ export default function DashboardPage() {
                   </div>
                 </>
               ) : (
-                /* --- EDIT MODE --- */
+                /* edit mode */
                 <div className="mt-3 space-y-3 animate-in fade-in duration-200 w-full max-w-sm">
                   <div className="flex gap-3">
                     <div className="flex-1">
@@ -226,7 +224,7 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          {/* Stats Boxes (Hidden while editing on mobile for space) */}
+          {/* Stats Boxes (Hidden in mobile */}
           <div className={`grid grid-cols-3 gap-3 w-full md:w-auto mt-4 md:mt-0 ${isEditing ? 'hidden md:grid' : ''}`}>
             <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 md:p-4 text-center shadow-sm">
               <p className="text-2xl font-black text-blue-600">{lostCount}</p>
@@ -242,8 +240,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-
-        {/* ... Rest of your EXACT same page code (Items Grid, Empty States) remains unchanged below this ... */}
         
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -268,7 +264,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* EMPTY STATE */}
+        {/* empty state*/}
         {items.length === 0 && !error && (
           <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-16 text-center flex flex-col items-center">
             <div className="bg-slate-100 p-4 rounded-full mb-4 text-slate-400">
@@ -287,7 +283,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ITEMS GRID */}
+        {/* itemn grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => {
             const isMatched = item.status === "matched";

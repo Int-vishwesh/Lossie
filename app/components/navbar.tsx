@@ -1,41 +1,134 @@
 "use client";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+
+const navLinks = [
+  { href: '/feed', label: 'Feed' },
+  { href: '/about', label: 'About' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  }
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
-    <div className={`flex justify-between transition-colors duration-300 ${isOpen ? "bg-orange-100 md:!bg-transparent" : "bg-transparent"} `}>
-      <div className='ml-1 z-10 flex flex-col'>
-        <Link href={'/'}>
-          <Image src={"/logo.png"} alt="lossie logo" width={110} height={20} className='max-sm:h-9 max-sm:w-20 -mt-1'/> 
-        </Link>
-        <div className='flex gap-1 -mt-3 max-sm:-mt-2 ml-[18px] max-sm:ml-[12px]'>
-          <h1 className='text-[#2d132e] text-[14.5px] font-sans max-sm:text-[12px] leading-none'>AI</h1>
-          <h1 className='text-[#2d132e] text-[14.5px] font-sans max-sm:text-[12px] leading-none'>lost & found tracker</h1>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-orange-100/80 backdrop-blur-lg shadow-sm'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+
+          {/* logo */}
+          <Link href="/" className="flex flex-col gap-0 group">
+            <Image
+              src="/logo.png"
+              alt="lossie"
+              width={90}
+              height={18}
+              className="sm:w-[100px] transition-transform duration-200 group-hover:scale-[1.03]"
+            />
+            <span className="text-[11px] sm:text-xs text-[#2d132e]/60 font-medium tracking-wide ml-[14px] -mt-1.5">
+              ai lost & found
+            </span>
+          </Link>
+
+          {/* desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navLinks.map(link => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? 'text-[#dd7230] bg-orange-50'
+                      : 'text-[#2d132e] hover:text-[#dd7230] hover:bg-orange-50/50'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <Link
+              href="/dashboard"
+              className={`text-sm font-bold ml-2 px-5 py-2 rounded-lg border-2 transition-all duration-200 ${
+                pathname === '/dashboard'
+                  ? 'bg-[#2d132e] text-white border-[#2d132e]'
+                  : 'border-[#2d132e] text-[#2d132e] hover:bg-[#2d132e] hover:text-white'
+              }`}
+            >
+              Dashboard
+            </Link>
+          </nav>
+
+          {/* mobile toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-lg text-[#2d132e] hover:bg-orange-200/50 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </div>
 
-      <div className={`flex flex-col`}>
-        <button onClick={toggleMenu} className='text-[#2d132e] md:hidden ml-auto m-2'>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        <nav className={`m-1 flex ${isOpen ? "flex-col transition-all duration-300" : "max-sm:hidden"} max-sm:border-black `}>
-          <Link href='/feed' className='text-[#2d132e] text-[19px] font-semibold font-sans mx-2 px-2 py-1 hover:text-[#dd7230] m-1 max-sm:text-[15px] max-sm:mx-1 max-sm:text-right'>Feed</Link>
-          <Link href='/about' className='text-[#2d132e] text-[19px] font-semibold font-sans mx-2 px-2 py-1 hover:text-[#dd7230] m-1 max-sm:text-[15px] max-sm:mx-1 max-sm:text-right'>About</Link>
-          <Link href='/dashboard' className='text-[#dd7230] text-[19px] font-semibold font-sans border-[#2d132e] border-[2px] hover:bg-[#dd7230] hover:text-[#ffffff] px-2 mb-3 m-1 mr-2 max-sm:text-[15px] max-sm:mx-1 max-sm:px-1.5 max-sm:py-0 max-sm:text-right transition-colors rounded-md'>Dashboard</Link>
+      {/* mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-60 border-t border-orange-200/50' : 'max-h-0'
+        }`}
+      >
+        <nav className="px-4 py-3 space-y-1 bg-orange-100/95 backdrop-blur-lg">
+          {navLinks.map(link => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`block text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors ${
+                  isActive
+                    ? 'text-[#dd7230] bg-orange-50'
+                    : 'text-[#2d132e] hover:bg-orange-50'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <Link
+            href="/dashboard"
+            className={`block text-sm font-bold px-4 py-2.5 rounded-lg border-2 text-center transition-colors ${
+              pathname === '/dashboard'
+                ? 'bg-[#2d132e] text-white border-[#2d132e]'
+                : 'border-[#2d132e] text-[#2d132e] hover:bg-[#2d132e] hover:text-white'
+            }`}
+          >
+            Dashboard
+          </Link>
         </nav>
       </div>
-      
-    </div>
-  )
+    </header>
+  );
 };
 
 export default Navbar;
