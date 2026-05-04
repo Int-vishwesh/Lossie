@@ -161,7 +161,7 @@ export default function LandingPage() {
             </FadeIn>
           </div>
 
-          {/* Right: Hero Image */}
+
           <FadeIn delay={200} className="flex justify-center lg:justify-end">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-br from-[#dd7230]/10 to-[#2d132e]/5 rounded-[3rem] blur-2xl -z-10"></div>
@@ -200,7 +200,7 @@ export default function LandingPage() {
         </section>
       </FadeIn>
 
-      {/* HOW IT WORKS  */}
+
       <section className="px-6 sm:px-12 py-20 lg:py-28">
         <div className="max-w-6xl mx-auto">
           
@@ -230,7 +230,7 @@ export default function LandingPage() {
                     </p>
                   </div>
 
-                  {/* Image Side */}
+
                   <div className={`flex justify-center ${index % 2 !== 0 ? 'md:justify-start' : 'md:justify-end'}`}>
                     <div className="relative">
                       <div className={`absolute -inset-3 ${step.color} rounded-3xl -z-10 opacity-50`}></div>
@@ -251,7 +251,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* WHY LOSSIE — FEATURES */}
+
       <FadeIn>
         <section className="px-6 sm:px-12 pb-20 lg:pb-28">
           <div className="max-w-6xl mx-auto">
@@ -301,7 +301,7 @@ export default function LandingPage() {
         </section>
       </FadeIn>
 
-      {/* FAQ SECTION */}
+
       <section className="px-6 sm:px-12 pb-20 lg:pb-28">
         <div className="max-w-3xl mx-auto">
           
@@ -325,7 +325,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA SECTION */}
+
       <FadeIn>
         <section className="px-6 sm:px-12 pb-20">
           <div className="max-w-3xl mx-auto text-center">

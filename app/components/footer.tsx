@@ -5,11 +5,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#2d132e] text-white mt-12">
       
-      {/* Main Footer Content */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-12 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           
-          {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <Image src="/logo.png" alt="Lossie" width={100} height={20} className="brightness-0 invert opacity-90" />
@@ -19,7 +17,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/40 mb-4">Navigate</h4>
             <ul className="space-y-2.5">
@@ -46,7 +43,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/40 mb-4">Resources</h4>
             <ul className="space-y-2.5">
@@ -68,11 +65,9 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Connect */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/40 mb-4">Connect</h4>
             <div className="flex items-center gap-3 mb-5">
-              {/* GitHub */}
               <a 
                 href="https://github.com/Jerryaryan123" 
                 target="_blank" 
@@ -82,7 +77,6 @@ export default function Footer() {
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
               </a>
-              {/* LinkedIn */}
               <a 
                 href="https://www.linkedin.com/in/vishwesh" 
                 target="_blank" 
@@ -104,7 +98,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+
       <div className="border-t border-white/10">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-white/40">

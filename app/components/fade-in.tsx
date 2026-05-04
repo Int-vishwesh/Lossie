@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, ReactNode } from "react";
 type Props = {
   children: ReactNode;
   className?: string;
-  delay?: number; // ms
+  delay?: number;
 };
 
 export default function FadeIn({ children, className = "", delay = 0 }: Props) {
@@ -15,10 +15,7 @@ export default function FadeIn({ children, className = "", delay = 0 }: Props) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
+        setIsVisible(entry.isIntersecting);
       },
       { threshold: 0.15 }
     );
