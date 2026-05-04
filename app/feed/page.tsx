@@ -57,11 +57,10 @@ export default function FeedPage() {
     try {
       const formData = new FormData();
       
-      // Clean and honest: just the tab and the file!
+      
       formData.append("category", activeTab); 
       formData.append("file", file);
 
-      // Pointing to the brand new endpoint
       const response = await fetch("http://127.0.0.1:8000/search-feed", {
         method: "POST",
         body: formData,
@@ -76,7 +75,7 @@ export default function FeedPage() {
           return {
             id: item.id,
             name: item.title || (realDbItem ? realDbItem.name : "Item"),
-            type: activeTab, // Guaranteed to be the active tab
+            type: activeTab,
             date: 'Match Found',
             imageUrl: item.image_url || (realDbItem ? realDbItem.imageUrl : defaultItemImage.src),
             similarity: item.similarity
@@ -99,7 +98,7 @@ export default function FeedPage() {
     setSearchImage(null);
   };
 
-  // 3. UI Guardrails
+  // UI Guardrails
   const itemsToDisplay = searchResults !== null 
     ? searchResults.filter(item => 
         item.type === activeTab && 
@@ -112,7 +111,7 @@ export default function FeedPage() {
       );
 
   return (
-    <div className="min-h-screen p-6 bg-slate-50">
+    <div className="min-h-screen p-6 bg-orange-100">
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-8">
         
