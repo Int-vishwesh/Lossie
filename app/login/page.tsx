@@ -41,7 +41,7 @@ export default function LoginPage() {
           password,
         });
         if (error) throw error;
-        router.push("/dashboard"); 
+        window.location.href = "/dashboard";
       } else {
         // Sign Up WITH Extra Data
         const { error } = await supabase.auth.signUp({
@@ -75,7 +75,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
         },
       });
       if (error) throw error;
