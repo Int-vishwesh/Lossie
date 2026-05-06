@@ -66,7 +66,7 @@ export default function DashboardPage() {
           residence: meta.residence_type || "day_scholar"
         });
 
-        const response = await fetch(`http://127.0.0.1:8000/my-items/${user.id}`);
+        const response = await fetch(`https://int-vishwesh-lossie-backend.hf.space/my-items/${user.id}`);
         if (!response.ok) throw new Error("Failed to fetch items from server");
 
         const result = await response.json();
