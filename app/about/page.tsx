@@ -164,7 +164,7 @@ export default function AboutPage() {
       <section className="px-6 sm:px-12 pb-24">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-black text-[#2d132e] mb-4">
-            Ready to find what you've lost?
+            Ready to find what you&apos;ve lost?
           </h2>
           <p className="text-slate-500 mb-8 max-w-lg mx-auto">
             Join the Lossie community and let AI do the hard work of matching and recovering your belongings.
