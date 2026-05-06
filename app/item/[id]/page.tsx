@@ -27,7 +27,7 @@ export default function ItemDetailsPage() {
   useEffect(() => {
     const fetchItemDetails = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/item/${id}`);
+        const response = await fetch(`https://int-vishwesh-lossie-backend.hf.space/item/${id}`);
         if (!response.ok) throw new Error("Item not found");
         
         const result = await response.json();
