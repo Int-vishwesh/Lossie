@@ -36,7 +36,7 @@ export default function ReportItemPage() {
         formData.append("file", imageFile);
       }
 
-      const response = await fetch("http://127.0.0.1:8000/add-item", {
+      const response = await fetch("https://int-vishwesh-lossie-backend.hf.space/add-item", {
         method: "POST",
         body: formData,
       });
