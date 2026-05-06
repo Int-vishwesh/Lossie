@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Lossie - Lost & Found Tracker',
   description: 'AI-powered lost and found tracker.',
+  icons: {
+    icon: '/logoURL.png',
+  },
 };
 
 export default function RootLayout({
