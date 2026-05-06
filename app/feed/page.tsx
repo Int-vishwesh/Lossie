@@ -61,7 +61,7 @@ export default function FeedPage() {
       formData.append("category", activeTab); 
       formData.append("file", file);
 
-      const response = await fetch("http://127.0.0.1:8000/search-feed", {
+      const response = await fetch("https://int-vishwesh-lossie-backend.hf.space/search-feed", {
         method: "POST",
         body: formData,
       });
