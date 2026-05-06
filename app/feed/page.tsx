@@ -22,7 +22,7 @@ export default function FeedPage() {
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/items");
+        const res = await fetch("https://int-vishwesh-lossie-backend.hf.space/items");
         const json = await res.json();
         if (json.data) {
           const mappedItems = json.data.map((item: any) => ({
