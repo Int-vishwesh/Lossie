@@ -43,9 +43,9 @@ export async function middleware(request: NextRequest) {
 }
 
 // routes this Bouncer should monitor
+// routes this Bouncer should monitor
 export const config = {
   matcher: [
-    // Monitor everything EXCEPT static files, images, and next.js internals
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
