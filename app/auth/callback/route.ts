@@ -8,6 +8,10 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/dashboard';
 
   if (code) {
+    if (next.startsWith('lossieapp://')) {
+      return NextResponse.redirect(`${next}?code=${code}`);
+    }
+    
     const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
