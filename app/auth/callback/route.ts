@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/dashboard';
 
   if (code) {
-    if (next.startsWith('lossieapp://')) {
+        if (next.startsWith('lossieapp://') || next.startsWith('exp://')) {
       return NextResponse.redirect(`${next}?code=${code}`);
     }
     
